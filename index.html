@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto Fetcher</title>
+    <link rel="stylesheet" href="lotto/src/output.css">
+</head>
+<body>
+    <span class="text-center text-3xl mx-auto flex w-full justify-center mb-8 mt-8">Lotto Fetcher</span>
+    <div>
+        <div class="flex flex-row items-center justify-center mx-auto w-full max-w-md gap-1" id="lottoNumbers">
+            <div class="w-16 h-16 ">
+              <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border-2 border-gray-200 text-lg bg-white focus:bg-gray-50 focus:border-blue-400" type="text" name="" id="">
+            </div>
+            <div class="w-16 h-16 ">
+              <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border-2 border-gray-200 text-lg bg-white focus:bg-gray-50 focus:border-blue-400" type="text" name="" id="">
+            </div>
+            <div class="w-16 h-16 ">
+              <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border-2 border-gray-200 text-lg bg-white focus:bg-gray-50 focus:border-blue-400" type="text" name="" id="">
+            </div>
+            <div class="w-16 h-16 ">
+              <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border-2 border-gray-200 text-lg bg-white focus:bg-gray-50 focus:border-blue-400" type="text" name="" id="">
+            </div>
+            <div class="w-16 h-16 ">
+              <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border-2 border-gray-200 text-lg bg-white focus:bg-gray-50 focus:border-blue-400" type="text" name="" id="">
+            </div>
+            <div class="w-16 h-16 ">
+              <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border-2 border-gray-200 text-lg bg-white focus:bg-gray-50 focus:border-blue-400" type="text" name="" id="">
+            </div>
+        </div>
+        <div class="flex flex-row items-center justify-center mx-auto w-full max-w-md gap-1">
+            <div class="w-16 h-4">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-bl-lg rounded-br-lg border-x-2 border-b-2 border-gray-400 text-lg bg-white"></div>
+            </div>
+            <div class="w-16 h-4">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-bl-lg rounded-br-lg border-x-2 border-b-2 border-gray-400 text-lg bg-white"></div>
+            </div>
+            <div class="w-16 h-4">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-bl-lg rounded-br-lg border-x-2 border-b-2 border-gray-400 text-lg bg-white"></div>
+            </div>
+            <div class="w-16 h-4">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-bl-lg rounded-br-lg border-x-2 border-b-2 border-gray-400 text-lg bg-white"></div>
+            </div>
+            <div class="w-16 h-4">
+              <div class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-bl-lg rounded-br-lg border-x-2 border-b-2 border-gray-400 text-lg bg-white"></div>
+            </div>
+        </div>
+        <div class="flex flex-row items-center justify-center mx-auto w-full max-w-md gap-1">
+            <div class="w-16 h-8">
+              <span class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none text-gray-800" id="result_0">NaN</span>
+            </div>
+            <div class="w-16 h-8">
+              <span class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none text-gray-800" id="result_1">NaN</span>
+            </div>
+            <div class="w-16 h-8">
+              <span class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none text-gray-800" id="result_2">NaN</span>
+            </div>
+            <div class="w-16 h-8">
+              <span class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none text-gray-800" id="result_3">NaN</span>
+            </div>
+            <div class="w-16 h-8">
+              <span class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none text-gray-800" id="result_4">NaN</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function findCountForPair(pair, pairsData) {
+            for (const item of pairsData) {
+                if (item.pairs.includes(pair)) {
+                    return item.count;
+                }
+            }
+            return null;
+        }
+
+        function checkPairCount(pairToCheck, index) {
+            console.log(pairToCheck)
+            //const pairToCheck = document.getElementById('pairToCheck').value;
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        const count = findCountForPair(pairToCheck, data);
+                        const resultDiv = document.getElementById('result');
+                        if (count !== null) {
+                            const resultDiv = document.getElementById('result_' + index);
+                            //return count;
+                            resultDiv.textContent = count;
+                        } else {
+                            return NaN;
+                            //resultDiv.textContent = `Pair ${pairToCheck} not found.`;
+                        }
+                    } else {
+                        console.error('Request failed with status:', xhr.status);
+                    }
+                }
+            };
+
+            xhr.open('GET', 'lotto/pairs.json');
+            xhr.send();
+        }
+        // Event listener for input change
+        const inputs = document.querySelectorAll('#lottoNumbers input[type="text"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                const valuesArray = getInputValues();
+                if(valuesArray.length == 6){
+                    const pairs = getSiblingPairs(valuesArray);
+                    if(pairs.length == 5){
+                        pairs.forEach((pair, index) =>{
+                            checkPairCount(pair, index);
+                        })
+                    }
+                }
+            });
+        });
+        // Function to get input values as array
+        function getInputValues() {
+            //const inputs = document.querySelectorAll('input[type="text"]');
+            const valuesArray = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(value => value !== ''); // Exclude empty values
+            return valuesArray;
+        }
+        // Function to get pairs of adjacent items from an array
+        function getSiblingPairs(array) {
+            const pairs = [];
+            for (let i = 0; i < array.length - 1; i++) {
+                //pairs.push([array[i], array[i + 1]]);
+                pairs.push(`${array[i]},${array[i + 1]}`);
+            }
+            return pairs;
+        }
+    </script>
+</body>
+</html>
